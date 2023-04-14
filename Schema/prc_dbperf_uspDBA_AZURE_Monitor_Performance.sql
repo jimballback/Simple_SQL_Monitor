@@ -68,7 +68,7 @@ SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED  --  Do Not need to use any loc
 
 		sqlserver_start_time
 --- instance id. Used if you use the whole suite of  perf scripts.
-		IF NOT EXISTS (Select * from sys.tables where name = 'dba_instance')
+		IF (select count(*) from dbperf.dba_instance) = 0
 		BEGIN
 			select @instance_id = 0
 		END

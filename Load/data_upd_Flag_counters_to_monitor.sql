@@ -29,6 +29,7 @@ WHERE  object_nm like '%buffer manager'
 		OR  counter_nm  ='Readahead pages/sec'
 		OR  counter_nm  ='Page life expectancy'                                                                                                            
 		);
+
 UPDATE [dbperf].[dba_Instance_perf_param]
 SET		[Log_ind] = 1
 WHERE  object_nm like '%Access Methods'
@@ -38,6 +39,7 @@ WHERE  object_nm like '%Access Methods'
 		OR	counter_nm  ='Full Scans/sec'                                                                                                                 
                                                                                                    
 		);
+
 UPDATE [dbperf].[dba_Instance_perf_param]
 SET		[Log_ind] = 1
 WHERE  object_nm like '%Locks'
@@ -50,7 +52,6 @@ WHERE  object_nm like '%Locks'
 		)
   AND instance_nm ='_Total';
 
-
 UPDATE [dbperf].[dba_Instance_perf_param]
 SET		[Log_ind] = 1
 WHERE  object_nm like '%SQL Errors'
@@ -58,8 +59,6 @@ WHERE  object_nm like '%SQL Errors'
                                                                                        
 		)
   AND instance_nm ='_Total';
-
-
 
 UPDATE [dbperf].[dba_Instance_perf_param]
 SET		[Log_ind] = 1
@@ -70,11 +69,7 @@ WHERE  object_nm like '%SQL Statistics'
 		OR	counter_nm  ='SQL Re-Compilations/sec'                                                                                                                 
 		OR	counter_nm  ='SQL Attention rate'                                                                                                                 
                                                                                                    
-		)
-
-
-
-
+		);
 
 UPDATE [dbperf].[dba_Instance_perf_param]
 SET		[Log_ind] = 1
@@ -96,7 +91,6 @@ WHERE  object_nm like '%Memory Manager'
 
 		);
 
-
 UPDATE [dbperf].[dba_Instance_perf_param]
 SET		[Log_ind] = 1
 WHERE  object_nm like '%Wait Statistics'
@@ -113,5 +107,16 @@ WHERE  object_nm like '%Wait Statistics'
 		OR	counter_nm  = 'Workspace synchronization waits'  
 	--	OR	counter_nm  = 'Transaction ownership waits'                                                                                                                  
 		)
-  AND instance_nm = 'Average wait time (ms)';		
-		
+  AND instance_nm = 'Average wait time (ms)';	
+
+UPDATE [dbperf].[dba_Instance_perf_param]
+SET		[Log_ind] = 1		
+WHERE  object_nm like '%Databases'
+
+  AND	(	counter_nm  = 'Transactions/sec'
+		OR	counter_nm  = 'Bulk Copy Rows/sec'                                                                                                                  
+		OR	counter_nm  = 'Log Flush Waits/sec' 
+       	OR	counter_nm  = 'Log Flush Write Time (ms)'                                                                                                                  
+		OR	counter_nm  = 'Backup/Restore Throughput/sec'                                                                                                                 
+		)
+  AND instance_nm = '_Total';

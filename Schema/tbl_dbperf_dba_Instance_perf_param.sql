@@ -1,4 +1,22 @@
-﻿CREATE TABLE [dbperf].[dba_Instance_perf_param](
+﻿
+
+
+
+/****************************************************************
+ *
+ * NAME: [dbperf].[dba_Instance_perf_param]
+ *
+ * PURPOSE:			Lookup table for performance counters that need to be recorded.
+ * DESCRIPTION:		A log indicator flag determines the counterstat are actually recorded in the smapshot table. Update the log_ind flag column.
+ * INSTALLATION:	
+ * USAGE: 
+ *		
+ *
+ *	Latest Version: 4/14/2023 
+ *  Created By: James Nafpliotis
+ *
+ *****************************************************************/
+CREATE TABLE [dbperf].[dba_Instance_perf_param](
 	[Inst_perf_param_id] [int] NOT NULL,
 	[object_nm] [varchar](128) NOT NULL,
 	[counter_nm] [varchar](128) NOT NULL,
