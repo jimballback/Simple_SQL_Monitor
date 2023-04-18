@@ -117,25 +117,6 @@ WHERE  object_nm like '%Databases'
 		OR	counter_nm  = 'Bulk Copy Rows/sec'                                                                                                                  
 		OR	counter_nm  = 'Log Flush Waits/sec' 
        	OR	counter_nm  = 'Log Flush Write Time (ms)'                                                                                                                  
-		OR	counter_nm  = 'Backup/Restore Throughput/sec' 
-		OR	counter_nm  = 'Bulk Copy Throughput/sec'
+		OR	counter_nm  = 'Backup/Restore Throughput/sec'                                                                                                                 
 		)
   AND instance_nm = '_Total';
- 
-UPDATE [dbperf].[dba_Instance_perf_param]
-SET		[Log_ind] = 1		
-WHERE  object_nm like '%Workload Group Stats'
-
-  AND	(		counter_nm  like  'cpu usage%'
-			OR  counter_nm  like  'cpu effective%'
-		)
-  AND instance_nm = 'default';
-
- UPDATE [dbperf].[dba_Instance_perf_param]
-SET		[Log_ind] = 1		
-WHERE  object_nm like '%Buffer Manager'
-
-  AND	(		counter_nm  like  'Buffer cache hit ratio%'
-
-		);
-

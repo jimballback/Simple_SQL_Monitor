@@ -1,7 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Load",
+    "\\Monitor",
+    "\\Schema"
   ],
-  "SelectedNode": "\\C:\\Users\\JimFa\\Source\\Repos\\jimballback\\Simple_SQL_Monitor",
+  "SelectedNode": "\\Schema\\SqlQuery_1.sql",
   "PreviewInSolutionExplorer": false
 }

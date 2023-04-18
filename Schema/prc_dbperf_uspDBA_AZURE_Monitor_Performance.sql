@@ -1,4 +1,4 @@
-﻿ALTER procedure dbperf.uspDBA_AZURE_Monitor_Performance
+﻿create procedure dbperf.uspDBA_AZURE_Monitor_Performance
 (
 			@log_data_ind bit  = 0						/* Indicator specifying whether to log this in xadmindb				  */
 		,	@snapshot_date datetime = NULL    /* use to pass in if called from a job with other per procs			 */   
@@ -8,14 +8,12 @@
 		)
  As
  
-/*****************************************************************************************
+/****************************************************************
  *
  * NAME: dbperf.uspDBA_AZURE_Monitor_Performance
  *
  * PURPOSE:			Azure version of calculating select SQL Server performance counters.
  * DESCRIPTION:		Calculates  and records from the DMV sys.dm_os_performance_counters.
- *					Counter types 537003264 and 1073939712 counter types are a snapshot of
- *					the ratio if the counter name and counter name base.
  * INSTALLATION:	Install on a seperated schema in Azure SQL database.
  * USAGE: 
  *		
@@ -28,7 +26,7 @@
  *	Latest Version: 4/4/2023 
  *  Created By: James Nafpliotis
  *
- *****************************************************************************************/
+ *****************************************************************/
  
 SET NOCOUNT ON
 SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED  --  Do Not need to use any lock resources
@@ -172,13 +170,18 @@ SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED  --  Do Not need to use any loc
 -- ELSE use the calcualtions
 		ELSE
 		BEGIN
-		--Fix: you need to treat 537003264 and 1073939712 as just a snapshot.  the difference calculation is totally incorrect. probably we will need to make sure the base is  not zero.
-		-- use a view or other code to perform the ratio calculation on the fly instead from [dbperf].dba_Instance_perf_snap table.
 			UPDATE #dba_Instance_perf_snap
 			SET   instance_perf_value=     CASE 
 											WHEN counter_type = '272696576'
 											THEN    (curr.[cumulative_perf_value] - isnull(prev.[cumulative_perf_value],0))/@interval_in_seconds 
-											WHEN counter_type in('1073874176',-1)   -- will calculate 1073874176 types in a seperate step
+											WHEN counter_type =('537003264')
+											THEN (
+													SELECT  curr.[cumulative_perf_value] / case when child.[cumulative_perf_value] = 0 then 1
+																								else isnull(child.[cumulative_perf_value],1)*100 end		
+													from #dba_Instance_perf_snap as child
+													where child.parent_param_id = curr.inst_perf_param_id
+																			)
+											WHEN counter_type in('1073874176','1073939712',-1)   -- will calculate 1073874176 types in a seperate step
 											THEN    (curr.[cumulative_perf_value] - isnull(prev.[cumulative_perf_value],0))
 											ELSE isnull(curr.[cumulative_perf_value] ,0)
 											END
