@@ -68,7 +68,78 @@ AND dbperf.dba_Instance_perf_param.instance_nm = parent.instance_nm
 AND dbperf.dba_Instance_perf_param.counter_nm=parent.counter_nm
 WHERE dbperf.dba_Instance_perf_param.counter_type in ( 1073939712 );
 END;
+IF (@EngineEdition <= 4 OR  @EngineEdition =8) -- Azure SQL Managed Instance
+BEGIN
+INSERT INTO [dbperf].[dba_Instance_perf_param]
+           ([Inst_perf_param_id]
+           ,[object_nm]
+           ,[counter_nm]
+           ,[instance_nm]
+           ,[Log_ind]
+           ,[counter_type]
+           ,[parent_param_id]
 
+           )
+SELECT checksum('Custom:IO',	'Physical Reads',	'Total'),'Custom:IO','Physical Reads',	'Total'
+,0 -- log all 
+,-1 AS cntr_type
+,null
+UNION
+
+SELECT checksum('Custom:Network',	'Total Packets Sent',	'Total'),'Custom:IO',	'Total Packets Sent',	'Total'
+,0 -- log all 
+,-1 AS cntr_type
+,null
+UNION
+
+SELECT checksum('Custom:IO',	'SQL IO Util',	'Total'),'Custom:IO',	'SQL IO Util',	'Total'
+,0 -- log all 
+,-1 AS cntr_type
+,null
+UNION
+
+SELECT checksum('Custom:IO',	'Physical Writes',	'Total'),'Custom:IO',	'Physical Writes',	'Total'
+,0 -- log all 
+,-1 AS cntr_type
+,null
+UNION
+
+SELECT checksum('Custom:Processor',	'SQL CPU Idle',	'Total'),'Custom:Processor',	'SQL CPU Idle',	'Total'
+,0 -- log all 
+,-1 AS cntr_type
+,null
+UNION
+
+SELECT checksum('Custom:Processor',	'SQL CPU Util',	'Total'),'Custom:Processor',	'SQL CPU Util',	'Total'
+,0 -- log all 
+,-1 AS cntr_type
+,null
+UNION
+
+SELECT checksum('Custom:Network',	'Total Packet Errors',	'Total'),'Custom:Network',	'Total Packet Errors',	'Total'
+,0 -- log all 
+,-1 AS cntr_type
+,null
+UNION
+
+SELECT checksum('Custom:Network',	'Total Packets Received',	'Total'),'Custom:Network',	'Total Packets Received',	'Total'
+,0 -- log all 
+,-1 AS cntr_type
+,null
+UNION
+
+SELECT checksum('Custom:Memory'	,'Buffer Cache Quality',	'Total'),'Custom:Memory',	'Buffer Cache Quality',	'Total'
+,0 -- log all 
+,-1 AS cntr_type
+,null
+UNION
+
+SELECT checksum('Custom:Processor',	'Total System CPU',	'Total'),'Custom:Processor',	'Total System CPU',	'Total'
+,0 -- log all 
+,-1 AS cntr_type
+,null
+
+END
 END TRY
 BEGIN CATCH  
     SELECT   

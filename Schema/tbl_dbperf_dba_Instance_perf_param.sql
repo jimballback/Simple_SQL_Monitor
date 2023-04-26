@@ -7,7 +7,7 @@
  * NAME: [dbperf].[dba_Instance_perf_param]
  *
  * PURPOSE:			Lookup table for performance counters that need to be recorded.
- * DESCRIPTION:		A log indicator flag determines the counterstat are actually recorded in the smapshot table. Update the log_ind flag column.
+ * DESCRIPTION:		A log indicator flag determines the counters that are actually recorded in the snapshot table. Update the log_ind flag column.
  * INSTALLATION:	
  * USAGE: 
  *		

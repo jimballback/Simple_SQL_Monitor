@@ -131,11 +131,18 @@ WHERE  object_nm like '%Workload Group Stats'
 		)
   AND instance_nm = 'default';
 
- UPDATE [dbperf].[dba_Instance_perf_param]
+UPDATE [dbperf].[dba_Instance_perf_param]
 SET		[Log_ind] = 1		
 WHERE  object_nm like '%Buffer Manager'
 
   AND	(		counter_nm  like  'Buffer cache hit ratio%'
 
+		);
+
+UPDATE [dbperf].[dba_Instance_perf_param]
+SET		[Log_ind] = 1	
+WHERE  object_nm like '%SQLServer:Database Replica'
+  AND	(	counter_nm  = 'Transaction Delay'
+  
 		);
 

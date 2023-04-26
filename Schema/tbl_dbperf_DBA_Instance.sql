@@ -1,6 +1,6 @@
 ﻿/****************************************************************
  *
- * NAME: [dbperf].[DBA_Instance]
+ * NAME: [dbperf].[dba_Instance]
  *
  * PURPOSE:			Table that holds general informatin for an IAAS or on-prem instance.
  * DESCRIPTION:		Records historical general instance information. For azure , this will be stub for now. Can be used to compare performance after scaleup or scaledown.
@@ -21,7 +21,7 @@ GO
 
 IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbperf].[DBA_Instance]') AND type in (N'U'))
 BEGIN
-CREATE TABLE [dbperf].[DBA_Instance](
+CREATE TABLE [dbperf].[dba_Instance](
 	[instance_id] [int] NOT NULL,
 	[snapshot_date] [datetime] NOT NULL,
 	[instance_nm] [sysname] NOT NULL,
