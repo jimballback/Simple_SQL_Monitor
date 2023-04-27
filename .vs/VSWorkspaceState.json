@@ -3,7 +3,9 @@
     "",
     "\\Load",
     "\\Monitor",
-    "\\Schema"
+    "\\Schema",
+    "\\Schema\\Query Views"
   ],
+  "SelectedNode": "\\Load",
   "PreviewInSolutionExplorer": false
 }
