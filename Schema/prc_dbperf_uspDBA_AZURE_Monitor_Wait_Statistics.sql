@@ -45,7 +45,6 @@ AS
 	DECLARE @instance_last_started datetime		/* the time the instance was last started */
 	DECLARE @last_snapshot_date datetime		/* thelast snapshot date											*/
 	DECLARE @interval_in_seconds numeric(18,2)	/* the interval in seconds of the snapshot to do rate calculations */
-	DECLARE @server_name sysname				/* the name of the server.   */
 	DECLARE @physical_memory_mb int
 	DECLARE @logical_processor_count int
 	DECLARE @first_measure_from_start bit
@@ -74,7 +73,6 @@ AS
 	SELECT @step = 'Initialization'
 	SELECT   
 			@snapshot_date = ISNULL(@snapshot_date,CURRENT_TIMESTAMP)
-		,	@server_name = @@servername
 		--- best guess for Azure
 		,	@instance_last_started = sqlserver_start_time
 		 FROM sys.dm_os_sys_info
