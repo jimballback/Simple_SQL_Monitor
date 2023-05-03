@@ -1,4 +1,9 @@
-﻿CREATE VIEW dbperf.vw_memory_snapshot
+﻿IF NOT EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbperf].[vw_memory_snapshot]'))
+EXEC dbo.sp_executesql @statement = N'CREATE VIEW [dbperf].[vw_memory_snapshot]
+as
+SeleCT 1 AS col1'
+GO
+ALTER VIEW dbperf.vw_memory_snapshot
 as
 /*****************************************************************************************
  *
@@ -24,28 +29,28 @@ as
 	SELECT
 		snapshot_date
 	,	MAX(CASE WHEN counter_nm = 'Total Server Memory (KB)'
-				THEN Instance_perf_value/1024/1024
+				THEN CAST(Instance_perf_value/1024/1024 as NUMERIC(5,2))
 			END)  AS Total_Server_Memory_GB
 	,	MAX(CASE WHEN counter_nm = 'Target Server Memory (KB)'
-				THEN Instance_perf_value/1024/1024 
+				THEN CAST(Instance_perf_value/1024/1024 as NUMERIC(5,2))
 			END)  AS Target_Server_Memory_GB
 	,	MAX(CASE WHEN counter_nm = 'Database Cache Memory (KB)'
-				THEN Instance_perf_value/1024/1024 
+				THEN CAST(Instance_perf_value/1024/1024 as NUMERIC(5,2))
 			END)  AS Database_Cache_Memory_GB
 	,	MAX(CASE WHEN counter_nm = 'Stolen Server Memory (KB)'
-				THEN Instance_perf_value/1024/1024 
+				THEN CAST(Instance_perf_value/1024/1024 as NUMERIC(5,2))
 			END)  AS StolenServer_Memory_GB
 	,	MAX(CASE WHEN counter_nm = 'Maximum Workspace Memory (KB)'
-				THEN  Instance_perf_value/1024/1024 
+				THEN CAST(Instance_perf_value/1024/1024 as NUMERIC(5,2))
 			END) Maximum_Workspace_Memory_GB
 	,	MAX(CASE WHEN counter_nm = 'Granted Workspace Memory (KB)'
-				THEN Instance_perf_value/1024/1024 
+				THEN CAST(Instance_perf_value/1024/1024 as NUMERIC(5,2))
 			END)  AS Granted_Workspace_Memory_GB
 	,	MAX(CASE WHEN counter_nm = 'Free Memory (KB)'
-				THEN Instance_perf_value/1024/1024 
+				THEN CAST(Instance_perf_value/1024/1024 as NUMERIC(5,2))
 			END)  AS Free_Memory_GB
 	,	MAX(CASE WHEN counter_nm = 'Connection Memory (KB)'
-				THEN Instance_perf_value/1024/1024 
+				THEN CAST(Instance_perf_value/1024/1024 as NUMERIC(5,2))
 			END)  AS Connection_Memory_GB
 	,	MAX(CASE WHEN counter_nm = 'Page life expectancy'
 				THEN Instance_perf_value 

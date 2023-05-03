@@ -1,4 +1,9 @@
-﻿ALTER VIEW dbperf.vw_database_throughput
+﻿IF NOT EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbperf].[vw_database_throughput]'))
+EXEC dbo.sp_executesql @statement = N'CREATE VIEW [dbperf].[vw_database_throughput]
+as
+SeleCT 1 AS col1'
+GO
+ALTER VIEW dbperf.vw_database_throughput
 AS
 
 /*****************************************************************************************

@@ -3,21 +3,10 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-/****************************************************************
- *
- * NAME: [dbperf].[dba_wait_summary]
- *
- * PURPOSE:			Table that holds recordd wait information
- * DESCRIPTION:		Table is denormlized. The future version may be normalized like the performance counter table.
- * INSTALLATION:	
- * USAGE: 
- *		
- *
- *	Latest Version: 4/14/2023 
- *  Created By: James Nafpliotis
- *
- *****************************************************************/
-CREATE TABLE [dbperf].[DBA_wait_summary](
+
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbperf].[Historical_DBA_wait_summary]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbperf].[Historical_DBA_wait_summary](
 	[instance_id] [int] NOT NULL,
 	[snapshot_date] [datetime] NOT NULL,
 	[wait_type] [varchar](100) NOT NULL,
@@ -33,12 +22,26 @@ CREATE TABLE [dbperf].[DBA_wait_summary](
 	[cumulative_wait_time_request_average]  AS (case when [cumulative_wait_requests]=(0) then (0) else CONVERT([numeric](18,2),[cumulative_wait_time]/[cumulative_wait_requests]) end),
 	[interval_in_seconds] [numeric](18, 2) NOT NULL,
 	[first_measure_from_start] [bit] NOT NULL,
- CONSTRAINT [pk_dba_wait_summary] PRIMARY KEY CLUSTERED 
+	[date_added] [datetime] NOT NULL,
+	[archived_by_user] [varchar](100) NOT NULL
+ CONSTRAINT [pk_historical_dba_wait_summary] PRIMARY KEY CLUSTERED 
 (
 	[snapshot_date] DESC,
 	[wait_type] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
+END
+GO
+ALTER AUTHORIZATION ON [dbperf].[Historical_DBA_wait_summary] TO  SCHEMA OWNER 
 GO
 
-
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbperf].[df_historical_dba_wait_summary_date_added]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbperf].[Historical_DBA_wait_summary] ADD  CONSTRAINT [df_historical_dba_wait_summary_date_added]  DEFAULT (getdate()) FOR [date_added]
+END
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbperf].[df_historical_dba_wait_summary_archived_by_user]') AND type = 'D')
+BEGIN
+ALTER TABLE [dbperf].[Historical_DBA_wait_summary] ADD  CONSTRAINT [df_historical_dba_wait_summary_archived_by_user]  DEFAULT (SYSTEM_USER) FOR [archived_by_user]
+END
+GO

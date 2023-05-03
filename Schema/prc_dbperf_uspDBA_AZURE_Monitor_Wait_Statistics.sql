@@ -63,7 +63,7 @@ AS
     ,  [cumulative_signal_wait_time]  [numeric](18,2) NOT NULL 
     ,  [interval_in_seconds][numeric] (18,2)  NULL 
     ,  [first_measure_from_start] [bit]  NULL
-    ,  [date_archived] [datetime]   NULL                        
+                    
     )
 
 	BEGIN
