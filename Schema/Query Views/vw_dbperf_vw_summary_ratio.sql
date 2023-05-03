@@ -1,7 +1,9 @@
 ﻿IF NOT EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbperf].[vw_summary_ratio]'))
+BEGIN
 EXEC dbo.sp_executesql @statement = N'CREATE VIEW [dbperf].[vw_summary_ratio]
 as
 SeleCT 1 AS col1'
+END
 GO
 ALTER VIEW dbperf.vw_summary_ratio
 AS
