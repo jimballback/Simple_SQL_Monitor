@@ -66,8 +66,8 @@ AS
 
 
 	--SELECT sbase.snapshot_date,base.*,parent.*,sbase.instance_perf_value,pbase.instance_perf_value
-	FROM [XAdminDB].[dbperf].[dba_Instance_perf_param] base
-	JOIN [XAdminDB].[dbperf].[dba_Instance_perf_param] parent
+	FROM [dbperf].[dba_Instance_perf_param] base
+	JOIN [dbperf].[dba_Instance_perf_param] parent
 	ON base.parent_param_id = parent.Inst_perf_param_id
 	JOIN [dbperf].[dba_Instance_perf_snap] sbase
 	ON sbase.inst_perf_param_id = base.Inst_perf_param_id
