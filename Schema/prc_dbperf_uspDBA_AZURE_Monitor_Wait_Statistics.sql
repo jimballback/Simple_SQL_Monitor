@@ -1,6 +1,6 @@
-﻿IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbperf].[uspDBA_Monitor_Wait_Statistics]') AND type in (N'P', N'PC'))
+﻿IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbperf].[uspDBA_AZURE_Monitor_Wait_Statistics]') AND type in (N'P', N'PC'))
 BEGIN
-EXEC dbo.sp_executesql @statement = N'CREATE PROCEDURE [dbperf].[uspDBA_Monitor_Wait_Statistics] AS' 
+EXEC dbo.sp_executesql @statement = N'CREATE PROCEDURE [dbperf].[uspDBA_AZURE_Monitor_Wait_Statistics] AS' 
 END
 GO
 ALtER PROCEDURE [dbperf].[uspDBA_AZURE_Monitor_Wait_Statistics] 
