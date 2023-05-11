@@ -167,6 +167,21 @@ WHERE  object_nm like '%:Database Replica'
   AND	(	counter_nm  = 'Transaction Delay'
   
 		);
+
+		--- Tempdb
+UPDATE [dbperf].[dba_Instance_perf_param]
+SET		[Log_ind] = 1	
+WHERE object_nm like '%:Databases'
+	AND instance_nm = 'tempdb'
+	AND Counter_nm in 
+		(	'Log File(s) Used Size (KB)'
+		,	'Log File(s) Size (KB)'
+		,	'Data File(s) Size (KB)'
+		,	'Percent Log Used'
+		,	'Log Growths'
+		,	'Write Transactions/sec'
+)
+
 END
 END TRY
 BEGIN CATCH  
