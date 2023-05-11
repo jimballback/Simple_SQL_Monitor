@@ -7,6 +7,8 @@
 *  Original Author: James Nafpliotis
 ************************************************/
 Declare @EngineEdition INT
+DECLARE @perf_obj_string varchar(100);
+
 SELECT @EngineEdition = CAST(SERVERPROPERTY('EngineEdition') AS INT);
 -- Object_name column has  different values  between PAAS services  and IAAS/On-Prem.
 BEGIN TRY
@@ -14,6 +16,16 @@ IF ((@EngineEdition <= 4 )
 and  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbperf].[dba_Instance_perf_param]') AND type in (N'U'))
 )
 BEGIN
+SELECT @perf_obj_string ='SQL Server'
+END
+IF ((@EngineEdition = 5 )
+and  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbperf].[dba_Instance_perf_param]') AND type in (N'U'))
+)
+BEGIN
+select @perf_obj_string = (select distinct  SUBSTRING([OBJECT_NAME],1, CHARINDEX ( ':', [OBJECT_NAME])-1) 
+from sys.dm_os_performance_counters
+where object_name like 'MSSQL$%');
+END
 --https://learn.microsoft.com/en-us/sql/t-sql/functions/serverproperty-transact-sql?view=sql-server-ver16
 INSERT INTO [dbperf].[dba_Instance_perf_param]
            ([Inst_perf_param_id]
@@ -28,26 +40,26 @@ SELECT
 ,				trim(object_name),trim(counter_name),trim(instance_name),cntr_type,0,0 AS [Log_ind]
 
 FROM sys.dm_os_performance_counters
-WHERE  object_name <> 'SQLServer:Databases' 
-AND	object_name <>'SQLServer:Catalog Metadata'   
-AND object_name <> 'SQLServer:Deprecated Features' 
-AND object_name <> 'SQLServer:Query Store'
-AND object_name <> 'SQLServer:Columnstore'                                                                                                           
-AND	object_name <> 'SQLServer:Advanced Analytics'
-AND object_name <> 'SQLServer:Broker Activation' 
+WHERE  object_name <> @perf_obj_string+':Databases' 
+AND	object_name <>@perf_obj_string+':Catalog Metadata'   
+AND object_name <> @perf_obj_string+':Deprecated Features' 
+AND object_name <> @perf_obj_string+':Query Store'
+AND object_name <> @perf_obj_string+':Columnstore'                                                                                                           
+AND	object_name <> @perf_obj_string+':Advanced Analytics'
+AND object_name <> @perf_obj_string+'::Broker Activation' 
 UNION
 SELECT 
 	CHECKSUM	(object_name,counter_name,instance_name) AS [Inst_perf_param_id]
 ,			trim(object_name),trim(counter_name),trim(instance_name),cntr_type,0,0 AS [Log_ind]
 
 FROM sys.dm_os_performance_counters
-WHERE	( object_name = 'SQLServer:Databases'			and instance_name in ('_Total','tempdb') )
-OR		(object_name ='SQLServer:Catalog Metadata'		and instance_name in ('_Total','tempdb') )   
-OR		(object_name = 'SQLServer:Deprecated Features'	and instance_name in ('_Total','tempdb') ) 
-OR		(object_name = 'SQLServer:Query Store'			and instance_name in ('_Total','tempdb') )
-OR		(object_name = 'SQLServer:Columnstore'			and instance_name in ('_Total','tempdb') )                                                                                                           
-OR		(object_name = 'SQLServer:Advanced Analytics'	and instance_name in ('_Total','tempdb') )
-OR		(object_name = 'SQLServer:Broker Activation'	and instance_name in ('_Total','tempdb') )
+WHERE	( object_name = @perf_obj_string+':Databases'			and instance_name in ('_Total','tempdb') )
+OR		(object_name =@perf_obj_string+':Catalog Metadata'		and instance_name in ('_Total','tempdb') )   
+OR		(object_name = @perf_obj_string+':Deprecated Features'	and instance_name in ('_Total','tempdb') ) 
+OR		(object_name = @perf_obj_string+':Query Store'			and instance_name in ('_Total','tempdb') )
+OR		(object_name = @perf_obj_string+':Columnstore'			and instance_name in ('_Total','tempdb') )                                                                                                           
+OR		(object_name = @perf_obj_string+':Advanced Analytics'	and instance_name in ('_Total','tempdb') )
+OR		(object_name = @perf_obj_string+':Broker Activation'	and instance_name in ('_Total','tempdb') )
 ORDER BY 1 DESC ,2 DESC,3 DESC;
 
 
@@ -67,7 +79,7 @@ ON dbperf.dba_Instance_perf_param.object_nm = parent.object_nm
 AND dbperf.dba_Instance_perf_param.instance_nm = parent.instance_nm
 AND dbperf.dba_Instance_perf_param.counter_nm=parent.counter_nm
 WHERE dbperf.dba_Instance_perf_param.counter_type in ( 1073939712 );
-END;
+
 IF (@EngineEdition <= 4 OR  @EngineEdition =8) -- Azure SQL Managed Instance
 BEGIN
 INSERT INTO [dbperf].[dba_Instance_perf_param]

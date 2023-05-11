@@ -4,6 +4,28 @@
 *  DEPENDENCIES: [dbperf].[dba_Instance_perf_param]
 *  Original Author: James Nafpliotis
 ************************************************/
+Declare @EngineEdition INT
+DECLARE @perf_obj_string varchar(100);
+
+SELECT @EngineEdition = CAST(SERVERPROPERTY('EngineEdition') AS INT);
+-- Object_name column has  different values  between PAAS services  and IAAS/On-Prem.
+BEGIN TRY
+IF ((@EngineEdition <= 4 )
+and  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbperf].[dba_Instance_perf_param]') AND type in (N'U'))
+)
+BEGIN
+SELECT @perf_obj_string ='SQL Server'
+END
+IF ((@EngineEdition = 5 )
+and  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbperf].[dba_Instance_perf_param]') AND type in (N'U'))
+)
+BEGIN
+select @perf_obj_string = (select distinct  SUBSTRING([OBJECT_NAME],1, CHARINDEX ( ':', [OBJECT_NAME])-1) 
+from sys.dm_os_performance_counters
+where object_name like 'MSSQL$%');
+END
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbperf].[dba_Instance_perf_param]') AND type in (N'U'))
+BEGIN
 UPDATE [dbperf].[dba_Instance_perf_param]
 SET		[Log_ind] = 1
 WHERE  object_nm like '%general statistics'
@@ -141,8 +163,14 @@ WHERE  object_nm like '%Buffer Manager'
 
 UPDATE [dbperf].[dba_Instance_perf_param]
 SET		[Log_ind] = 1	
-WHERE  object_nm like '%SQLServer:Database Replica'
+WHERE  object_nm like '%:Database Replica'
   AND	(	counter_nm  = 'Transaction Delay'
   
 		);
-
+END
+END TRY
+BEGIN CATCH  
+    SELECT   
+        ERROR_NUMBER() AS ErrorNumber  
+       ,ERROR_MESSAGE() AS ErrorMessage;  
+END CATCH  
