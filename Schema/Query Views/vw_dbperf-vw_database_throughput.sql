@@ -12,7 +12,7 @@ AS
  *
  * NAME: dbperf.vw_database_throughput
  *
- * PURPOSE:			View of counters that can be calcuclated in a certain interval.
+ * PURPOSE:			View of counters that can be calculated in a certain interval.
  * DESCRIPTION:		Counters are calculated  by difference.
  *					
  * INSTALLATION:	Install on a seperated schema in Azure SQL database.
