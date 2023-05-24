@@ -12,14 +12,18 @@
 	DECLARE @delay	char(8)= '00:05:00'
 	DECLARE @snapshot_date datetime
 	DECLARE @EngineEdition INT
+	---		Get the SQL product type
+	SELECT @EngineEdition = CAST(SERVERPROPERTY('EngineEdition') AS INT);
 WHILE @iteration_num <=@iteration_count
 BEGIN
 	select @snapshot_date =CURRENT_TIMESTAMP
 	exec dbperf.uspDBA_AZURE_Monitor_Performance  @snapshot_date = @snapshot_date,@debug =0;
 	exec dbperf.uspDBA_AZURE_Monitor_Wait_Statistics  @snapshot_date = @snapshot_date ;
+	
 	IF (@EngineEdition = 5 )
 	BEGIN
 		exec [dbperf].[uspdba_AZURE_archive_db_resource_stats]
+		EXEC [dbperf].[uspDBA_AZURE_Monitor_IO_Detail]  @snapshot_date = @snapshot_date ,@DEBUG =0;
 	END
 	SELECT @iteration_num = @iteration_num + 1;
 	WAITFOR DELAY @delay;	

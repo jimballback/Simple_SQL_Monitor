@@ -100,27 +100,27 @@ AS
 		HAVING SUM(wait_time)>0
 		ORDER BY 1 DESC,4 DESC
 --print '--------------------------- io summary (30 min)------------------------------'
---select database_name,sum(num_of_reads) as total_reads,sum(num_of_writes ) as total_writes
---,sum(io_stall_ms) as sum_io_stall_ms from 
---dbperf.dba_filestats
--- where snapshot_date between @startdate and @enddate 
--- group by database_name
+select database_name,sum(num_of_reads) as total_reads,sum(num_of_writes ) as total_writes
+,sum(io_stall_ms) as sum_io_stall_ms from 
+dbperf.dba_filestats
+where snapshot_date between @startdate and @enddate 
+group by database_name
 --print '--------------------------- DB io summary (30 min)------------------------------'
---select database_name,sum(num_of_reads) as total_reads,sum(num_of_writes ) as total_writes
---,sum(io_stall_ms) as sum_io_stall_ms from 
---dbperf.dba_filestats
---where snapshot_date  between @startdate and @enddate 
---and db_file_type = 'rows'
--- group by database_name
+select database_name,sum(num_of_reads) as total_reads,sum(num_of_writes ) as total_writes
+,sum(io_stall_ms) as sum_io_stall_ms from 
+dbperf.dba_filestats
+where snapshot_date  between @startdate and @enddate 
+and db_file_type = 'rows'
+group by database_name
 
 
 --print '--------------------------- io  tlog summary )------------------------------'
---select database_name,sum(num_of_reads) as total_reads,sum(num_of_writes ) as total_writes
---,sum(io_stall_ms) as sum_io_stall_ms from 
---dbperf.dba_filestats
---where snapshot_date  between @startdate and @enddate 
---and db_file_type = 'LOG'
--- group by database_name
+select database_name,sum(num_of_reads) as total_reads,sum(num_of_writes ) as total_writes
+,sum(io_stall_ms) as sum_io_stall_ms from 
+dbperf.dba_filestats
+where snapshot_date  between @startdate and @enddate 
+and db_file_type = 'LOG'
+ group by database_name
 
 
 END

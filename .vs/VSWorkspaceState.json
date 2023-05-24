@@ -6,6 +6,6 @@
     "\\Schema",
     "\\Schema\\Query Views"
   ],
-  "SelectedNode": "\\Load\\data_upd_Flag_counters_to_monitor.sql",
+  "SelectedNode": "\\Schema\\prc_dbperf_uspDBA_AZURE_Monitor_IO_Detail.sql",
   "PreviewInSolutionExplorer": false
 }
