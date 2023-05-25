@@ -7,8 +7,11 @@ ALtER PROCEDURE [dbperf].[uspDBA_AZURE_Monitor_Wait_Statistics]
  (       
 			@snapshot_date datetime = NULL				/* use to pass in if called from a master Caller			 */   
 		,	@debug bit = 0	   
-        ,   @reinitialize  bit = 0                       /* used to reinitialize after a bug or some other incident is observerd
-		,	@send_alert_ind bit = 0						/*	Future Use:		*/                                                          */  
+        ,   @reinitialize  bit = 0                       /* used to reinitialize after a bug or some other incident is observerd  */
+		,	@archive_flag bit  =1						/* A flag specifying to archive.  to the historical table. */
+		,	@archive_after_days int = 4					/* The amount of days to  to keep in the current table. */
+		,	@auto_reinitialize_hours int = 24			/* reinitialize if the last snapshot is longerthan the amount of hours since the last measure  */
+		,	@send_alert_ind bit = 0						/*	Future Use:		*/		
     )
 AS
 /****************************************************************
@@ -273,7 +276,45 @@ AS
 		--	IF @@TRANCOUNT > 0	ROLLBACK TRAN
 		--	RETURN 0
 		--END		
-	END TRY
+	IF @archive_flag   =1
+		BEGIN
+		BEGIN TRANSACTION
+
+		INSERT INTO [dbperf].[Historical_DBA_wait_summary]
+           ([instance_id]
+           ,[snapshot_date]
+           ,[wait_type]
+           ,[wait_requests]
+           ,[wait_time]
+           ,[signal_wait_time]
+           ,[max_wait_time_since_start]
+           ,[cumulative_wait_requests]
+           ,[cumulative_wait_time]
+           ,[cumulative_signal_wait_time]
+           ,[interval_in_seconds]
+           ,[first_measure_from_start]
+			)
+   
+		SELECT [instance_id]
+           ,[snapshot_date]
+           ,[wait_type]
+           ,[wait_requests]
+           ,[wait_time]
+           ,[signal_wait_time]
+           ,[max_wait_time_since_start]
+           ,[cumulative_wait_requests]
+           ,[cumulative_wait_time]
+           ,[cumulative_signal_wait_time]
+           ,[interval_in_seconds]
+           ,[first_measure_from_start]
+		FROM [dbperf].[DBA_wait_summary]
+			WHERE snapshot_date >= DATEADD(dd,@archive_after_days,@snapshot_date);
+			DELETE FROM [dbperf].[DBA_wait_summary]
+			WHERE snapshot_date >= DATEADD(dd,@archive_after_days,@snapshot_date);
+		IF @@TRANCOUNT >0 COMMIT TRAN
+		END
+
+			END TRY
 	BEGIN CATCH
 		DECLARE @ErrorMessage NVARCHAR(4000);
 		DECLARE @ErrorSeverity INT;
@@ -292,6 +333,7 @@ AS
                @ErrorSeverity, -- Severity.
                @ErrorState -- State.
                );
+		IF @@TRANCOUNT >0 ROLLBACK TRAN
 		RETURN -1
 	END CATCH;
 RETURN 0
