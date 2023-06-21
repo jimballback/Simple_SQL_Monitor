@@ -12,13 +12,13 @@ DECLARE @perf_obj_string varchar(100);
 SELECT @EngineEdition = CAST(SERVERPROPERTY('EngineEdition') AS INT);
 -- Object_name column has  different values  between PAAS services  and IAAS/On-Prem.
 BEGIN TRY
-IF ((@EngineEdition <= 4 )
+IF ((@EngineEdition <= 4 ) -- ON PREM, IAAS
 and  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbperf].[dba_Instance_perf_param]') AND type in (N'U'))
 )
 BEGIN
 SELECT @perf_obj_string ='SQL Server'
 END
-IF ((@EngineEdition = 5 )
+IF ((@EngineEdition = 5 )   --5 = SQL Database
 and  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbperf].[dba_Instance_perf_param]') AND type in (N'U'))
 )
 BEGIN

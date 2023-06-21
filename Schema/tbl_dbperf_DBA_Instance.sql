@@ -2,7 +2,7 @@
  *
  * NAME: [dbperf].[dba_Instance]
  *
- * PURPOSE:			Table that holds general informatin for an IAAS or on-prem instance.
+ * PURPOSE:			Table that holds general information for an IAAS or on-prem instance.
  * DESCRIPTION:		Records historical general instance information. For azure , this will be stub for now. Can be used to compare performance after scaleup or scaledown.
  * INSTALLATION:	
  * USAGE: 

@@ -31,7 +31,7 @@ AS
 *							in calculating the deltas for a particular interval 
 *							The data is stored primarily in the dbperf.dba_filestats table
 *				AZURE:
-*				DB_ID('tempdb'); retunrs null.. hardcoding 2
+*				DB_ID('tempdb'); returns null.. hardcoding 2
 *				will only log tempdb and the user database
 * Dependencies:	dbperf schema
 *					dbperf.dba_filestats table
@@ -49,7 +49,7 @@ SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED  --  Do Not need to use any loc
 	DECLARE @server_name SYSNAME				/* The name of the instance.												*/
 	DECLARE @first_measure_from_start BIT
 	DECLARE @instance_id INTEGER
-	DECLARE @EngineEdition INT					/* The database engine id that shwos the SQL product type.					*/
+	DECLARE @EngineEdition INT					/* The database engine id that shows the SQL product type.					*/
 	DECLARE @database_id INT					/*
 												--https://learn.microsoft.com/en-us/sql/t-sql/functions/db-id-transact-sql?view=sql-server-ver16
 												When used with Azure SQL Database, DB_ID may not return the same result as querying database_id from sys.databases. 
@@ -73,7 +73,7 @@ SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED  --  Do Not need to use any loc
 		,	io_stall_ms bigint
 		,	io_stall_reads_ms bigint
 		,	io_stall_writes_ms bigint
-		,	size_on_disk_MB numeric(9,2)
+		,	size_on_disk_GB numeric(9,2)
 		,	interval_in_seconds int
 		,	cumulative_num_of_reads bigint
 		,	cumulative_num_of_writes bigint
@@ -142,9 +142,14 @@ SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED  --  Do Not need to use any loc
 			SELECT @step as step, @instance_id as instance_id,@snapshot_date as snapshot_date ,@last_snapshot_date as last_napshot_date, @instance_last_started as instance_last_started ,@database_id As database_id
 			,@first_measure_from_start as first_measure_from_start
 		END		
+
+
+
+
 	--------------------- intialize table vairiable --------------------------------
 
-
+	IF (@EngineEdition = 5 )
+	BEGIN	-- BEGIN Azure SQL Database insert
 		
 		SELECT @step = 'load table variable'
 		IF @debug = 1
@@ -164,9 +169,9 @@ SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED  --  Do Not need to use any loc
 			,	[io_stall_read_ms]			AS	[io_stall_reads_ms]
 			,	[io_stall_write_ms]			AS [io_stall_writes_ms]
            	,	cast( 
-           		size_on_disk_bytes/1024.0/1024.0 
+           		size_on_disk_bytes/1024.0/1024.0/1024.0 
            			as numeric(9,2)
-           			)						as		size_on_disk_MB 
+           			)						as		size_on_disk_GB 
 			,	@interval_in_seconds as interval_in_seconds
 			,	[num_of_reads]	as [cumulative_num_of_reads]
 			,	[num_of_writes]	as[cumulative_num_of_writes]
@@ -206,7 +211,7 @@ SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED  --  Do Not need to use any loc
 			,	cast( 
            		size_on_disk_bytes/1024.0/1024.0 
            			as numeric(9,2)
-           			)						as		size_on_disk_MB 
+           			)						as		size_on_disk_GB 
 			,	@interval_in_seconds
 			,	[num_of_reads]			as [cumulative_num_of_reads]
 			,	[num_of_writes]			as	[cumulative_num_of_writes]
@@ -238,7 +243,7 @@ SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED  --  Do Not need to use any loc
            ,	[io_stall_ms]
            ,	[io_stall_reads_ms]
            ,	[io_stall_writes_ms]
-           ,	[size_on_disk_MB] 
+           ,	[size_on_disk_GB] 
            ,	[interval_in_seconds]
            ,	[cumulative_num_of_reads]
            ,	[cumulative_num_of_writes]
@@ -266,7 +271,7 @@ SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED  --  Do Not need to use any loc
            ,	cast( 
            			size_on_disk_bytes/1024.0/1024.0 
            			as numeric(9,2)
-           			)						as		size_on_disk_MB 
+           			)						as		size_on_disk_GB 
            ,	@interval_in_seconds
            ,	[num_of_reads]			as	[cumulative_num_of_reads]
            ,	[num_of_writes]			as	[cumulative_num_of_writes]
@@ -304,7 +309,7 @@ SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED  --  Do Not need to use any loc
 			,	[io_stall_read_ms]			AS	[io_stall_reads_ms]
 			,	[io_stall_write_ms]			AS [io_stall_writes_ms]
 			,	cast( 
-           		size_on_disk_bytes/1024.0/1024.0 
+           		size_on_disk_bytes/1024.0/1024.0/1024.0 
            			as numeric(9,2)
            			)						as		size_on_disk_MB 
 			,	@interval_in_seconds
@@ -319,6 +324,74 @@ SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED  --  Do Not need to use any loc
          
 		FROM sys.dm_io_virtual_file_stats(2,null) fs
 -- tempdb data 
+
+	END -- END Azure SQL Database insert
+	IF (@EngineEdition <=4 ) OR (@EngineEdition =8 )
+	BEGIN  --BEGIN ON-PREM,IAAS,SQLMI	
+		INSERT 
+		INTO #dba_filestats
+			(
+				[instance_id]
+           ,	[snapshot_date]
+           ,	[database_name]
+           ,	[logical_filename]
+           ,	[db_file_name]
+           ,	[db_file_type]
+           ,	[num_of_reads]
+           ,	[num_of_writes]
+           ,	[num_of_bytes_read]
+           ,	[num_of_bytes_written]
+           ,	[io_stall_ms]
+           ,	[io_stall_reads_ms]
+           ,	[io_stall_writes_ms]
+           ,	[size_on_disk_GB] 
+           ,	[interval_in_seconds]
+           ,	[cumulative_num_of_reads]
+           ,	[cumulative_num_of_writes]
+           ,	[cumulative_num_of_bytes_read]
+           ,	[cumulative_num_of_bytes_written]
+           ,	[cumulative_io_stall_ms]
+           ,	[cumulative_io_stall_reads_ms]
+           ,	[cumulative_io_stall_writes_ms]
+           ,	[first_measure_from_start]
+  
+           )
+
+           SELECT
+				@instance_id
+           ,	@snapshot_date
+		   ,	DB_NAME(mf.database_id)	as  [database_name]
+           ,	name					as	[logical_filename]
+           ,	physical_name			as	[db_file_name]
+           ,	type_desc				as	[db_file_type]
+           ,[num_of_reads]
+           ,[num_of_writes]
+           ,[num_of_bytes_read]
+           ,[num_of_bytes_written]
+           ,io_stall					as	[io_stall_ms]
+           ,[io_stall_read_ms]			AS	[io_stall_reads_ms]
+           ,[io_stall_write_ms]			AS [io_stall_writes_ms]
+           	,cast( 
+           		size_on_disk_bytes/1024.0/1024.0/1024.0 
+           			as numeric(9,2)
+           		)						as		size_on_disk_GB 
+           ,@interval_in_seconds
+           ,[num_of_reads]as [cumulative_num_of_reads]
+           ,[num_of_writes]as[cumulative_num_of_writes]
+           ,[num_of_bytes_read]as [cumulative_num_of_bytes_read]
+           ,[num_of_bytes_written]as [cumulative_num_of_bytes_written]
+           ,io_stall			as	[cumulative_io_stall_ms]
+           ,[io_stall_read_ms]	as	[cumulative_io_stall_reads_ms]
+           ,[io_stall_write_ms]	as	[cumulative_io_stall_writes_ms]
+           ,@first_measure_from_start
+        
+		FROM sys.dm_io_virtual_file_stats( null,null) fs
+		JOIN sys.master_files mf
+		ON fs.database_id = mf.database_id
+		AND fs.file_id = mf.file_id
+		
+	END --END ON-PREM,IAAS,SQLMI	
+
 		IF @debug = 1
 		BEGIN
 			select @step as step, * from #dba_filestats
@@ -359,7 +432,7 @@ SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED  --  Do Not need to use any loc
            ,[io_stall_ms]
            ,[io_stall_reads_ms]
            ,[io_stall_writes_ms]
-           ,[size_on_disk_MB]
+           ,[size_on_disk_GB]
            ,[interval_in_seconds]
            ,[cumulative_num_of_reads]
            ,[cumulative_num_of_writes]
@@ -383,7 +456,7 @@ SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED  --  Do Not need to use any loc
            ,[io_stall_ms]
            ,[io_stall_reads_ms]
            ,[io_stall_writes_ms]
-           ,[size_on_disk_MB]
+           ,[size_on_disk_GB]
            ,[interval_in_seconds]
            ,[cumulative_num_of_reads]
            ,[cumulative_num_of_writes]

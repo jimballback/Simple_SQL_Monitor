@@ -2,13 +2,13 @@
  *
  * NAME: [dbperf].[dba_Filestats]
  *
- * PURPOSE:			Table thatlogs IO data for data files.
+ * PURPOSE:			Table that logs IO data for data files.
  * DESCRIPTION:		Data from sys.dm_io_virtual_file_stats.
  * INSTALLATION:	
  * USAGE: 
  *		
  *
- *	Latest Version: 5/1472023 
+ *	Latest Version: 5/14/2023 
  *  Created By: James Nafpliotis
  *
  *****************************************************************/
@@ -29,7 +29,7 @@ CREATE TABLE [dbperf].[dba_Filestats](
 	[io_stall_ms] [bigint] NULL,
 	[io_stall_reads_ms] [bigint] NULL,
 	[io_stall_writes_ms] [bigint] NULL,
-	[size_on_disk_MB] [numeric](9, 2) NULL,
+	[size_on_disk_GB] [numeric](9, 2) NULL,
 	[pdw_node_id] [int] NULL,
 	[interval_in_seconds] [int] NULL,
 	[cumulative_num_of_reads] [bigint] NULL,
