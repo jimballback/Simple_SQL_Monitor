@@ -29,7 +29,7 @@ CREATE TABLE [dbperf].[dba_Filestats](
 	[io_stall_ms] [bigint] NULL,
 	[io_stall_reads_ms] [bigint] NULL,
 	[io_stall_writes_ms] [bigint] NULL,
-	[size_on_disk_GB] [numeric](9, 2) NULL,
+	[size_on_disk_GB] [numeric](9, 4) NULL,
 	[pdw_node_id] [int] NULL,
 	[interval_in_seconds] [int] NULL,
 	[cumulative_num_of_reads] [bigint] NULL,

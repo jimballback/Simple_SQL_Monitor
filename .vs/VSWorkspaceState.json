@@ -1,11 +1,12 @@
 {
   "ExpandedNodes": [
     "",
+    "\\Archive",
     "\\Load",
     "\\Monitor",
     "\\Schema",
     "\\Schema\\Query Views"
   ],
-  "SelectedNode": "\\Schema\\prc_dbperf_uspDBA_AZURE_Monitor_Wait_Statistics.sql",
+  "SelectedNode": "\\Schema\\tbl_dbperf_DBA_FileUsage.sql",
   "PreviewInSolutionExplorer": false
 }
