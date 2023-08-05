@@ -27,6 +27,7 @@ CREATE TABLE [dbperf].[DBA_FileUsage](
 	[logical_file_name] [sysname] NOT NULL,
 	[db_file_type] [nvarchar](60) NULL,
 	[db_file_name] [nvarchar](256) NULL,
+	[db_file_state] [nvarchar](60) NULL,
 	[db_filegroup_name] [sysname] NOT NULL,
 	[db_file_size_in_mb] [numeric](18, 2) NULL,
 	[db_file_used_in_mb] [numeric](18, 2) NULL

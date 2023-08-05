@@ -7,6 +7,6 @@
     "\\Schema",
     "\\Schema\\Query Views"
   ],
-  "SelectedNode": "\\Schema\\tbl_dbperf_DBA_FileUsage.sql",
+  "SelectedNode": "\\Schema\\tbl_dbperf_DBA_TableUsage.sql",
   "PreviewInSolutionExplorer": false
 }
