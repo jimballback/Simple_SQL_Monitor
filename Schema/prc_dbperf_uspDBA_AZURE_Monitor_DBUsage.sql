@@ -152,8 +152,9 @@ IF (@EngineEdition <= 4 OR  @EngineEdition =8) -- Azure SQL Managed Instance
 				,	df.physical_name
 				,	df.state_desc
 				,	case when df.type_desc =''LOG'' then ''LOG'' else ds.name end  as [db_filegroup_name]
-				,	CAST(ISNULL(FILEPROPERTY(df.name,''spaceused''),0)*8.00/1024.00 AS numeric(18,2))  as alloc_MB
 				,	CAST(size*8.00/1024.00 AS numeric(18,2)) as size_MB
+				,	CAST(ISNULL(FILEPROPERTY(df.name,''spaceused''),0)*8.00/1024.00 AS numeric(18,2))  as alloc_MB
+				
 				FROM sys.database_files  df
 				Left 
 				JOIN  sys.data_spaces ds

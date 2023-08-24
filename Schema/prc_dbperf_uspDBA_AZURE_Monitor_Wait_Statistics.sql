@@ -9,8 +9,8 @@ ALtER PROCEDURE [dbperf].[uspDBA_AZURE_Monitor_Wait_Statistics]
 		,	@debug bit = 0	   
         ,   @reinitialize  bit = 0                       /* used to reinitialize after a bug or some other incident is observerd  */
 		,	@archive_flag bit  =1						/* A flag specifying to archive.  to the historical table. */
-		,	@archive_after_days int = 4					/* The amount of days to  to keep in the current table. */
-		,	@auto_reinitialize_hours int = 24			/* reinitialize if the last snapshot is longerthan the amount of hours since the last measure  */
+		,	@archive_after_days int = 1					/* The amount of days to  to keep in the current table. */
+		,	@auto_reinitialize_hours int = 24			/* reinitialize if the last snapshot is longer than the amount of hours since the last measure  */
 		,	@send_alert_ind bit = 0						/*	Future Use:		*/		
     )
 AS
@@ -35,6 +35,7 @@ AS
  *  DNaf        4/05/2010  bug fix --- wait types that did not ocur in the previous interval and were  not getting recorded.
  *             wait types of zero are readdedd for now
  *				8/3/2022 -- added Azure version	AND used filter based on from Paul Randal sql skills recommendations.
+ *				6/4/2023 -- added  default archive section due to alot of logical reads displayed in performance counters.
  *
  *****************************************************************/
 		

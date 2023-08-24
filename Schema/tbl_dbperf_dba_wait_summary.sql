@@ -7,7 +7,7 @@ GO
  *
  * NAME: [dbperf].[dba_wait_summary]
  *
- * PURPOSE:			Table that holds recordd wait information
+ * PURPOSE:			Table that holds recorded wait information.
  * DESCRIPTION:		Table is denormlized. The future version may be normalized like the performance counter table.
  * INSTALLATION:	
  * USAGE: 

@@ -1,6 +1,11 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Archive",
+    "\\Load",
+    "\\Monitor",
+    "\\Schema"
   ],
+  "SelectedNode": "\\Schema\\tbl_dbperf_dba_wait_summary.sql",
   "PreviewInSolutionExplorer": false
 }
