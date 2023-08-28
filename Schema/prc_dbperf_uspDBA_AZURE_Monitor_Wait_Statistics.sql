@@ -309,9 +309,9 @@ AS
            ,[interval_in_seconds]
            ,[first_measure_from_start]
 		FROM [dbperf].[DBA_wait_summary]
-			WHERE snapshot_date >= DATEADD(dd,@archive_after_days,@snapshot_date);
+			WHERE snapshot_date <= DATEADD(dd,-@archive_after_days,@snapshot_date);
 			DELETE FROM [dbperf].[DBA_wait_summary]
-			WHERE snapshot_date >= DATEADD(dd,@archive_after_days,@snapshot_date);
+			WHERE snapshot_date <= DATEADD(dd,-@archive_after_days,@snapshot_date);
 		IF @@TRANCOUNT >0 COMMIT TRAN
 		END
 

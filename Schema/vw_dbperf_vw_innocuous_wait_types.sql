@@ -3,10 +3,15 @@ GO
 
 SET QUOTED_IDENTIFIER OFF
 GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbperf].[vw_innocuous_wait_types]') AND type in (N'V'))
+BEGIN
+EXEC dbo.sp_executesql @statement = N'CREATE VIEW [dbperf].[vw_innocuous_wait_types] AS Select 1 as A' 
+
+END
+GO
 
 
-
-CREATE VIEW [dbperf].[vw_innocuous_wait_types]
+ALTER VIEW [dbperf].[vw_innocuous_wait_types]
 AS
 
 /****************************************************************
