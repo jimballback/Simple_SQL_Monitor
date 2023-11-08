@@ -20,7 +20,7 @@ AS
  *
  * PURPOSE:		Summarizes daily object sizes, file sizes 
  * DESCRIPTION: Replaces [dbadmin].[uspDBA_Monitor_DBUsage] , whichas still unsing sql 2000 VUews
- *	
+ *		Tables: [dbperf].[DBA_TableUsage],[dbperf].[DBA_FileUsage]
  *
  * USAGE: exec [dbperf].[uspDBA_AZURE_Monitor_DBUsage] 
  * AUTHOR: James Nafpliotis	LAST MODIFIED BY: $Author:  $

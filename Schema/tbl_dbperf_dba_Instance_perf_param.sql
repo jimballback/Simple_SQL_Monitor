@@ -18,12 +18,12 @@
  *****************************************************************/
 CREATE TABLE [dbperf].[dba_Instance_perf_param](
 	[Inst_perf_param_id] [int] NOT NULL,
-	[object_nm] [varchar](128) NOT NULL,
-	[counter_nm] [varchar](128) NOT NULL,
-	[instance_nm] [varchar](128) NOT NULL,
-	[counter_type] [int] NOT NULL,
+	[object_nm] [varchar](128) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	[counter_nm] [varchar](128) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	[instance_nm] [varchar](128) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	[counter_type] [int] ,
 	[parent_param_id] [int] NULL,
-	[Log_ind] [bit] NOT NULL,
+	[Log_ind] [bit] NOT NULL
 
 
  CONSTRAINT [pk_dba_instance_perf_param] PRIMARY KEY CLUSTERED 

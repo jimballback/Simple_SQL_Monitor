@@ -16,7 +16,7 @@ and  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbperf].[d
 BEGIN
 SELECT @perf_obj_string ='SQL Server'
 END
-IF ((@EngineEdition = 5 )
+IF ((@EngineEdition = 5 ) --5 = SQL Database
 and  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbperf].[dba_Instance_perf_param]') AND type in (N'U'))
 )
 BEGIN
@@ -181,7 +181,21 @@ WHERE object_nm like '%:Databases'
 		,	'Log Growths'
 		,	'Write Transactions/sec'
 )
-
+IF ((@EngineEdition = 5 )
+	BEGIN
+		UPDATE [dbperf].[dba_Instance_perf_param]
+		SET		[Log_ind] = 1	
+		WHERE object_nm like '%:Databases'
+		AND instance_nm = '_Total'
+		AND Counter_nm in 
+		(	'Log File(s) Used Size (KB)'
+		,	'Log File(s) Size (KB)'
+		,	'Data File(s) Size (KB)'
+		,	'Percent Log Used'
+		,	'Log Growths'
+		,	'Write Transactions/sec'
+		)
+	END
 END
 END TRY
 BEGIN CATCH  

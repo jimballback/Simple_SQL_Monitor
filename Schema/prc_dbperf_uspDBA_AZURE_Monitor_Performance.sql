@@ -58,7 +58,7 @@ SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED  --  Do Not need to use any loc
 	,	[cumulative_perf_value] BIGINT NULL
 	,	[startup_measure_ind] BIT NOT NULL
 	,   [measurement_interval_s] INTEGER NOT NULL
-	,	[counter_nm] VARCHAR(255)
+	,	[counter_nm] VARCHAR(255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 	,	[counter_type] INTEGER
 	,	[parent_param_id] INTEGER NULL
 	);

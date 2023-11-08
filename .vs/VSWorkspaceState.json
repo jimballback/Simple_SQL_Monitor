@@ -4,8 +4,9 @@
     "\\Archive",
     "\\Load",
     "\\Monitor",
-    "\\Schema"
+    "\\Schema",
+    "\\Schema\\Query Views"
   ],
-  "SelectedNode": "\\Archive",
+  "SelectedNode": "\\Monitor\\job_monitor_iteration.sql",
   "PreviewInSolutionExplorer": false
 }
