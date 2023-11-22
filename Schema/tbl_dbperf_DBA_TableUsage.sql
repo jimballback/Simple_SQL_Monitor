@@ -4,14 +4,14 @@
  *
  * NAME: [dbperf].[DBA_TableUsage]
  *
- * PURPOSE:			Record storage growth.
+ * PURPOSE:			Record table storage growth. 
  * DESCRIPTION:		
  * INSTALLATION:	
  * USAGE: 
  *		
  *
  *	Latest Version: 8/4/2023 
- *  Created By: James Nafpliotis
+ *  Created By: James Nafpliotis 8/4/2023 
  *
  *****************************************************************/
 
@@ -22,15 +22,16 @@ CREATE TABLE [dbperf].[DBA_TableUsage](
 	[snapshot_date] [datetime] NOT NULL,
 	[schema_name] [sysname] NOT NULL,
 	[table_name] [sysname] NOT NULL,
-	[total_table_object_size_used_in_mb] [numeric](18, 2) NOT NULL,
-	[total_table_object_size_used_in_kb] [numeric](18, 2) NOT NULL,
-	[total_table_object_size_allocated_in_mb] [numeric](18, 2) NOT NULL,
-	[total_table_object_size_allocated_in_kb] [numeric](18, 2) NOT NULL,
+	[total_table_object_size_used_in_Gb] [numeric](18, 2) NOT NULL,
+	[total_table_object_size_allocated_in_Gb] [numeric](18, 3) NOT NULL, 
+	[total_table_object_size_used_in_Mb] [numeric](18, 3) NOT NULL,-- add extra decimals for small kb tables
+	[total_table_object_size_allocated_in_Mb] [numeric](18, 3) NOT NULL,-- add extra decimals for small kb tables
 	[row_count] [bigint] NOT NULL,
 	[partition_count] [integer] NOT NULL,
+	[index_count]	[integer] NOT NULL,
+	[column_count] [smallint] NOT NULL,
 	[filegroup_count] [integer] NOT NULL,
 	[table_type] [varchar](30) NOT NULL,
-	[column_count] [smallint] NOT NULL,
 	[table_create_date] [datetime] NOT NULL,
 	[table_modification_date] [datetime] NOT NULL,
 	[db_filegroup_name] [sysname] NOT NULL,
@@ -41,5 +42,5 @@ CREATE TABLE [dbperf].[DBA_TableUsage](
 END
 GO
 
-
+ 
 
