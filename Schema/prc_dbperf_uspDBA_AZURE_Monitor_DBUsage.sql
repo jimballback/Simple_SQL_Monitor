@@ -224,7 +224,7 @@ SELECT @step = 'DEBUG: INSERT TEMP TABLE DBA_TableUsage'
 --Columns that are of the large object (LOB) data types ntext, text, varchar(max), nvarchar(max), varbinary(max), xml, or image 
 --cant be specified as key columns for an index.
 
-SELECT @max_database_id = MAX(DATABASE_ID) FROM sys.databases
+SELECT @max_database_id = MAX(DATABASE_ID) FROM sys.databases WHERE state_desc = 'ONLINE'
 WHILE @iteration  <= @max_database_id
 BEGIN
   SELECT @database_name = DB_NAME( @iteration)				 
