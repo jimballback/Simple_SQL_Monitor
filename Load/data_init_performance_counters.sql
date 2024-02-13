@@ -16,7 +16,7 @@ IF ((@EngineEdition <= 4 ) -- ON PREM, IAAS
 and  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbperf].[dba_Instance_perf_param]') AND type in (N'U'))
 )
 BEGIN
-SELECT @perf_obj_string ='SQL Server'
+SELECT @perf_obj_string ='SQLServer'
 END
 IF ((@EngineEdition = 5 )   --5 = SQL Database
 and  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbperf].[dba_Instance_perf_param]') AND type in (N'U'))
@@ -60,6 +60,7 @@ OR		(object_name = @perf_obj_string+':Query Store'			and instance_name in ('_Tot
 OR		(object_name = @perf_obj_string+':Columnstore'			and instance_name in ('_Total','tempdb') )                                                                                                           
 OR		(object_name = @perf_obj_string+':Advanced Analytics'	and instance_name in ('_Total','tempdb') )
 OR		(object_name = @perf_obj_string+':Broker Activation'	and instance_name in ('_Total','tempdb') )
+OR		(object_name = @perf_obj_string+':Availability Replica'	and instance_name in ('_Total' ))
 ORDER BY 1 DESC ,2 DESC,3 DESC;
 
 
@@ -68,7 +69,7 @@ ORDER BY 1 DESC ,2 DESC,3 DESC;
 WITH parent ([Inst_perf_param_id],object_nm,counter_nm,instance_nm,counter_type)
 AS (
 	SELECT [Inst_perf_param_id],object_nm,concat(trim(REPLACE(counter_nm,' (ms)','')),' base') as counter_nm,instance_nm,counter_type
-	FROM[dbperf].[dba_Instance_perf_param]
+	FROM [dbperf].[dba_Instance_perf_param]
 	WHERE counter_type ='537003264'
 	)
 UPDATE [dbperf].[dba_Instance_perf_param] set parent_param_id =parent.Inst_perf_param_id

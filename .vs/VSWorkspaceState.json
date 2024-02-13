@@ -7,6 +7,6 @@
     "\\Schema",
     "\\Schema\\Query Views"
   ],
-  "SelectedNode": "\\Schema\\prc_dbperf_uspDBA_AZURE_Monitor_DBUsage.sql",
+  "SelectedNode": "\\Schema\\Query Views\\vw_dbperf_vw_memory_snapshot.sql",
   "PreviewInSolutionExplorer": false
 }

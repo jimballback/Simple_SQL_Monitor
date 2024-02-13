@@ -2,8 +2,8 @@
 	[instance_id] [int] NOT NULL,
 	[snapshot_date] [datetime] NOT NULL,
 	[inst_perf_param_id] [int] NOT NULL,
-	[instance_perf_value] [numeric](18, 2) NOT NULL,
-	[cumulative_perf_value] [numeric](18, 2) NOT NULL,
+	[instance_perf_value] [numeric](28, 2) NOT NULL,
+	[cumulative_perf_value] [numeric](28, 2) NOT NULL,
 	[startup_measure_ind] [bit] NOT NULL,
 	[measurement_interval_s] [int] NOT NULL,
  CONSTRAINT [pk_dba_instance_perf_snap] PRIMARY KEY CLUSTERED 

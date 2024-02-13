@@ -69,6 +69,7 @@ AS
 				AND instance_nm = 'Average wait time (ms)'
 				THEN Instance_perf_value
 				END) AS Log_buffer_waits_ms
+	
 	FROM [dbperf].[dba_Instance_perf_param] p
 	JOIN  [dbperf].[dba_Instance_perf_snap] s
 		ON p.[Inst_perf_param_id]= s.[Inst_perf_param_id]

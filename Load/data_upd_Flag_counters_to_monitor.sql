@@ -92,6 +92,10 @@ WHERE  object_nm like '%SQL Statistics'
 		OR	counter_nm  ='SQL Attention rate'                                                                                                                 
                                                                                                    
 		);
+-- Custom
+UPDATE [dbperf].[dba_Instance_perf_param]
+SET		[Log_ind] = 1
+where object_nm like 'Custom%';
 
 UPDATE [dbperf].[dba_Instance_perf_param]
 SET		[Log_ind] = 1
@@ -141,6 +145,7 @@ WHERE  object_nm like '%Databases'
        	OR	counter_nm  = 'Log Flush Write Time (ms)'                                                                                                                  
 		OR	counter_nm  = 'Backup/Restore Throughput/sec' 
 		OR	counter_nm  = 'Bulk Copy Throughput/sec'
+		OR	counter_nm  = 'Log Bytes Flushed/sec'
 		)
   AND instance_nm = '_Total';
  
@@ -164,9 +169,10 @@ WHERE  object_nm like '%Buffer Manager'
 UPDATE [dbperf].[dba_Instance_perf_param]
 SET		[Log_ind] = 1	
 WHERE  object_nm like '%:Database Replica'
-  AND	(	counter_nm  = 'Transaction Delay'
-  
-		);
+  AND	(		counter_nm  = 'Transaction Delay'
+			OR	counter_nm  = 'Mirrored Write Transactions/sec'
+		)
+  AND instance_nm = '_Total';
 
 		--- Tempdb
 UPDATE [dbperf].[dba_Instance_perf_param]
@@ -181,7 +187,7 @@ WHERE object_nm like '%:Databases'
 		,	'Log Growths'
 		,	'Write Transactions/sec'
 )
-IF ((@EngineEdition = 5 )
+IF (@EngineEdition = 5 )
 	BEGIN
 		UPDATE [dbperf].[dba_Instance_perf_param]
 		SET		[Log_ind] = 1	

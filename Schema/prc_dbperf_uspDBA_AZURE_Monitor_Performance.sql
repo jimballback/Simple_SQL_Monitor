@@ -54,8 +54,8 @@ SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED  --  Do Not need to use any loc
 	(	[instance_id] INTEGER NOT NULL DEFAULT 0
 	,	[snapshot_date] DATETIME NOT NULL
 	,	[inst_perf_param_id] INTEGER NOT NULL
-	,	[instance_perf_value] BIGINT  NULL
-	,	[cumulative_perf_value] BIGINT NULL
+	,	[instance_perf_value] numeric(28,2)  NULL
+	,	[cumulative_perf_value] numeric(28,2) NULL
 	,	[startup_measure_ind] BIT NOT NULL
 	,   [measurement_interval_s] INTEGER NOT NULL
 	,	[counter_nm] VARCHAR(255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
