@@ -2,11 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\Archive",
-    "\\Load",
     "\\Monitor",
     "\\Schema",
     "\\Schema\\Query Views"
   ],
-  "SelectedNode": "\\Schema\\Query Views\\vw_dbperf_vw_memory_snapshot.sql",
+  "SelectedNode": "\\Schema\\tbl_dbperf_DBA_Instance.sql",
   "PreviewInSolutionExplorer": false
 }
