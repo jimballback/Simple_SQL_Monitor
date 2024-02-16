@@ -6,6 +6,6 @@
     "\\Schema",
     "\\Schema\\Query Views"
   ],
-  "SelectedNode": "\\Schema\\tbl_dbperf_DBA_Instance.sql",
+  "SelectedNode": "\\Schema\\prc_dbperf_uspDBA_AZURE_Monitor_Instance_Config.sql",
   "PreviewInSolutionExplorer": false
 }

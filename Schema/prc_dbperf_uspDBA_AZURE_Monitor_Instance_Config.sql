@@ -1,12 +1,3 @@
-USE [XAdminDB]
-GO
-
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER OFF
-GO
-
 IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbperf].[uspDBA_AZURE_Monitor_Instance_Config]') AND type in (N'P', N'PC'))
 BEGIN
 EXEC dbo.sp_executesql @statement = N'CREATE PROCEDURE [dbperf].[uspDBA_AZURE_Monitor_Instance_Config]  AS' 
@@ -17,8 +8,7 @@ GO
 ALTER PROCEDURE [dbperf].[uspDBA_AZURE_Monitor_Instance_Config] 
  (      
 
-			@log_data_ind bit  = 0						/* Indicator specifying whether to log this	  */
-		,	@snapshot_date datetime = NULL    /* use to pass in if called from a job with other per procs			 */   
+			@snapshot_date datetime = NULL    /* use to pass in if called from a job with other per procs			 */   
 		,	@send_alert_ind bit = 0					/*	Future Use:		*/
 		,	@debug bit = 1
 	

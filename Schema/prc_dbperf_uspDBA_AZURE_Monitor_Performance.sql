@@ -5,8 +5,7 @@ END
 GO
 ALTER procedure dbperf.uspDBA_AZURE_Monitor_Performance
 (
-			@log_data_ind bit  = 0						/* Indicator specifying whether to log this in xadmindb				  */
-		,	@snapshot_date datetime = NULL    /* use to pass in if called from a job with other per procs			 */   
+			@snapshot_date datetime = NULL    /* use to pass in if called from a job with other per procs			 */   
 		,	@send_alert_ind bit = 0					/*	Future Use:		*/
 		,	@debug bit = 1
 	

@@ -18,7 +18,11 @@ and  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbperf].[d
 BEGIN
 SELECT @perf_obj_string ='SQLServer'
 END
-IF ((@EngineEdition = 5 )   --5 = SQL Database
+IF (
+	(
+		@EngineEdition = 5		--5 = SQL Database
+	OR	@EngineEdition = 8	    --8 = Azure SQL Managed Instance
+	)
 and  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbperf].[dba_Instance_perf_param]') AND type in (N'U'))
 )
 BEGIN
