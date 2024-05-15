@@ -12,7 +12,8 @@
  * USAGE: 
  *		
  *
- *	Latest Version: 4/14/2023 
+ *	Created Version: 4/14/2023 
+ * Latest version 2/19/2024
  *  Created By: James Nafpliotis
  *
  *****************************************************************/
@@ -34,4 +35,9 @@ CREATE TABLE [dbperf].[dba_Instance_perf_param](
 GO
 
 ALTER TABLE [dbperf].[dba_Instance_perf_param] ADD  DEFAULT ((0)) FOR [Log_ind]
+GO
+--missing index 
+CREATE NONCLUSTERED INDEX idx_cover_dba_Instance_perf_param_log_ind
+ON [dbperf].[dba_Instance_perf_param] ([Log_ind])
+INCLUDE ([object_nm],[counter_nm],[instance_nm],[counter_type],[parent_param_id])
 GO

@@ -7,7 +7,7 @@ ALTER procedure dbperf.uspDBA_AZURE_Monitor_Performance
 (
 			@snapshot_date datetime = NULL    /* use to pass in if called from a job with other per procs			 */   
 		,	@send_alert_ind bit = 0					/*	Future Use:		*/
-		,	@debug bit = 1
+		,	@debug bit = 0
 	
 		)
  As

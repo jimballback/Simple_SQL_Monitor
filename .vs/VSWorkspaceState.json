@@ -2,10 +2,11 @@
   "ExpandedNodes": [
     "",
     "\\Archive",
+    "\\Load",
     "\\Monitor",
     "\\Schema",
     "\\Schema\\Query Views"
   ],
-  "SelectedNode": "\\Schema\\prc_dbperf_uspDBA_AZURE_Monitor_Instance_Config.sql",
+  "SelectedNode": "\\Schema\\Query Views\\vw_dbperf_vw_wait_category_summary.sql",
   "PreviewInSolutionExplorer": false
 }

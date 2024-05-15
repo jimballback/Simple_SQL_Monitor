@@ -23,6 +23,7 @@ ALTER procedure [dbperf].[uspDBA_AZURE_Monitor_Wrapper]
     ,   @log_buffers_cache      bit = 0     /* STUB: WARNING: resource intensive Logs which objects pages are in the buffer */		
 	,	@alert_config_change	bit = 0     /* future use */
 	,	@send_alert_ind			bit = 0      /* Future use*/
+	,	@debug					bit = 0		/* send the debug flag to all */
 	
 
 ) 
@@ -64,10 +65,13 @@ DECLARE @RC int
 DECLARE @step varchar(100)
 DECLARE @procedure  sysname
 
-
+SELECT @step = 'Data Initialization'
 select @snapshot_date  = convert(datetime,cast(getdate() as nvarchar(30)),120)
 BEGIN TRY
-
+IF @debug=1
+	BEGIN
+		SELECT @step as step ,@snapshot_date as snapshot_date,@debug as debug 
+	END
 --config stub
 IF  EXISTS (SELECT * 
 						FROM sys.objects 
@@ -75,10 +79,11 @@ IF  EXISTS (SELECT *
 						 AND type in (N'P', N'PC')
 						)
 	BEGIN
-		select @procedure = '[dbperf].[uspDBA_AZURE_Monitor_Instance_Config]'
+		SELECT @procedure = '[dbperf].[uspDBA_AZURE_Monitor_Instance_Config]'
+		print  '-- Executing [dbperf].[uspDBA_AZURE_Monitor_Instance_Config]'
 		EXECUTE @RC = [dbperf].[uspDBA_AZURE_Monitor_Instance_Config] 
 					@snapshot_date
-				,	@alert_config_change
+				,	@debug
 	END
 -- perf stub
 IF  EXISTS (SELECT * 
@@ -89,10 +94,11 @@ IF  EXISTS (SELECT *
     AND (@log_perf_stats = 1)
 	BEGIN
 -- TODO: Set parameter values here.
-		select @procedure = '[dbperf].[uspDBA_AZURE_Monitor_Performance]'
+		SELECT  @procedure = '[dbperf].[uspDBA_AZURE_Monitor_Performance]'
+		print	'-- Executing [dbperf].[uspDBA_AZURE_Monitor_Performance]'
 		EXECUTE @RC = [dbperf].[uspDBA_AZURE_Monitor_Performance] 
 				@snapshot_date
-			,	@send_alert_ind
+			,	@debug
 			
 	END	
 IF  EXISTS (SELECT * 
@@ -103,10 +109,11 @@ IF  EXISTS (SELECT *
     AND (@log_wait_stats = 1)
 	BEGIN
 -- TODO: Set parameter values here.
-		select @procedure = '[dbperf].[uspDBA_AZURE_Monitor_Wait_Statistics]'
+		SELECT @procedure = '[dbperf].[uspDBA_AZURE_Monitor_Wait_Statistics]'
+		print  '-- Executing [dbperf].[uspDBA_AZURE_Monitor_Wait_Statistics]'
 		EXECUTE @RC = [dbperf].[uspDBA_AZURE_Monitor_Wait_Statistics] 
 				@snapshot_date
-			,	@send_alert_ind
+			,	@debug
 			
 	END	
 IF  EXISTS (SELECT * 
@@ -115,12 +122,13 @@ IF  EXISTS (SELECT *
 						 AND type in (N'P', N'PC')
 						)
     AND (@log_io_stats = 1)
-		BEGIN
+	BEGIN
 -- TODO: Set parameter values here.
-		select @procedure = '[dbperf].[uspDBA_AZURE_Monitor_IO_Detail]'
+		SELECT @procedure = '[dbperf].[uspDBA_AZURE_Monitor_IO_Detail]'
+		print  '-- Executing [dbperf].[uspDBA_AZURE_Monitor_IO_Detail]'
 		EXECUTE @RC = [dbperf].[uspDBA_AZURE_Monitor_IO_Detail] 
 				@snapshot_date
-			,	@send_alert_ind
+			,	@debug
 			
 	END	
 IF  EXISTS (SELECT * 
@@ -130,10 +138,11 @@ IF  EXISTS (SELECT *
 						)
     AND (@log_query_stats = 1)
     BEGIN
-    	select @procedure = '[dbperf].[uspDBA_AZURE_Monitor_Query_Stats]'
+    	SELECT @procedure = '[dbperf].[uspDBA_AZURE_Monitor_Query_Stats]'
+		print  '-- Executing [dbperf].[uspDBA_AZURE_Monitor_Query_Stats]'
 		EXECUTE @RC = [dbperf].[uspDBA_AZURE_Monitor_Query_Stats] 
 				@snapshot_date
-			,	@send_alert_ind
+			,	@debug
 
     END
 END TRY			
