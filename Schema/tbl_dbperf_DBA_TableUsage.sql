@@ -22,7 +22,7 @@ CREATE TABLE [dbperf].[DBA_TableUsage](
 	[snapshot_date] [datetime] NOT NULL,
 	[schema_name] [sysname] NOT NULL,
 	[table_name] [sysname] NOT NULL,
-	[total_table_object_size_used_in_Gb] [numeric](18, 2) NOT NULL,
+	[total_table_object_size_used_in_Gb] [numeric](18, 3) NOT NULL,
 	[total_table_object_size_allocated_in_Gb] [numeric](18, 3) NOT NULL, 
 	[total_table_object_size_used_in_Mb] [numeric](18, 3) NOT NULL,-- add extra decimals for small kb tables
 	[total_table_object_size_allocated_in_Mb] [numeric](18, 3) NOT NULL,-- add extra decimals for small kb tables
